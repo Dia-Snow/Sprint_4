@@ -9,6 +9,9 @@ import org.junit.runners.Parameterized;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.time.Duration;
 import static org.junit.Assert.assertEquals;
 
@@ -58,13 +61,14 @@ public class MainPageTest {
 
         /*Пролистнуть до вопросов о важном*/
         objMainPage.scrollToQuestion();
-        Thread.sleep(3000);
         /*Открыть строку из списка*/
         By newMainLine = objMainPage.mainLine(lineIndex);
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.elementToBeClickable(newMainLine));
         objMainPage.clickMainLine(newMainLine);
 
         /*Проверить, что открывается соответствующий текст*/
-        assertEquals("Текст не соответствует", driver.findElement(objMainPage.inLine(lineIndex)).getText(), lineText);
+        assertEquals("Текст не соответствует", lineText, driver.findElement(objMainPage.inLine(lineIndex)).getText());
     }
     @After
     public void turnOffBrowser() {
